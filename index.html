@@ -16,7 +16,8 @@
 
     body {
       font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), var(--bg-image) center / cover no-repeat fixed;
+      background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+        var(--bg-image) center / cover no-repeat fixed;
       margin: 0;
       padding: 16px;
     }
@@ -65,7 +66,6 @@
       border-radius: 18px;
       padding: 14px;
       box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-      position: relative;
       cursor: pointer;
     }
 
@@ -74,7 +74,6 @@
       font-size: 14px;
     }
 
-    /* modal */
     .modal {
       position: fixed;
       inset: 0;
@@ -130,7 +129,7 @@
   <div class="grid" id="orderGrid"></div>
 </div>
 
-<!-- ADD ORDER -->
+<!-- ADD -->
 <div class="modal" id="addModal">
   <div class="modal-box">
     <h2>Tambah Customer</h2>
@@ -156,24 +155,6 @@
 </div>
 
 <script>
-// ===== SIMPLE AUTH MODE =====
-// GANTI KODE LOGIN DI SINI (ADMIN ONLY)
-const ADMIN_CODE = "minjeonglah";
-
-let isAdmin = false;
-
-// prompt login sekali pas buka
-(function authCheck(){
-  const code = prompt("Masukkan kode admin (kosongkan untuk mode lihat saja):");
-  if(code === ADMIN_CODE){
-    isAdmin = true;
-    alert("Login admin berhasil");
-  } else {
-    isAdmin = false;
-    alert("Mode lihat saja");
-  }
-})();
-
 const grid = document.getElementById('orderGrid');
 const addModal = document.getElementById('addModal');
 const notesModal = document.getElementById('notesModal');
@@ -185,16 +166,14 @@ const previewImg = document.getElementById('previewImg');
 
 let currentIndex = null;
 
-window.openAdd = function(){
-  if(!isAdmin) return alert('Hanya admin yang bisa edit');
+function openAdd(){
   addModal.style.display='flex';
 }
 
-window.addOrder = function(){
-  if(!isAdmin) return;
+function addOrder(){
   if(!inputNama.value) return alert('Isi nama');
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  orders.push({nama: inputNama.value, notes:'', deadline:'', image:''});
+  orders.push({ nama: inputNama.value, notes:'', deadline:'', image:'' });
   localStorage.setItem('orders', JSON.stringify(orders));
   inputNama.value='';
   addModal.style.display='none';
@@ -214,16 +193,10 @@ function openNotes(i){
     previewImg.style.display='none';
   }
 
-  // kunci edit kalau bukan admin
-  notesText.disabled = !isAdmin;
-  deadlineInput.disabled = !isAdmin;
-  imageInput.disabled = !isAdmin;
-
   notesModal.style.display='flex';
 }
 
-window.saveNotes = function(){
-  if(!isAdmin) return alert('Hanya admin yang bisa edit');
+function saveNotes(){
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
   orders[currentIndex].notes = notesText.value;
   orders[currentIndex].deadline = deadlineInput.value;
@@ -243,33 +216,30 @@ function loadOrders(){
     c.innerHTML = `<div class="nama">${o.nama}</div>`;
     c.onclick = ()=>openNotes(i);
 
-    if(isAdmin){
-      c.oncontextmenu = e => {
-        e.preventDefault();
-        if(confirm('Hapus order ini?')){
-          orders.splice(i,1);
-          localStorage.setItem('orders', JSON.stringify(orders));
-          loadOrders();
-        }
-      };
+    c.oncontextmenu = e => {
+      e.preventDefault();
+      if(confirm('Hapus order ini?')){
+        orders.splice(i,1);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        loadOrders();
+      }
+    };
 
-      let pressTimer;
-      c.ontouchstart = ()=> pressTimer = setTimeout(()=>{
-        if(confirm('Hapus order ini?')){
-          orders.splice(i,1);
-          localStorage.setItem('orders', JSON.stringify(orders));
-          loadOrders();
-        }
-      },600);
-      c.ontouchend = ()=> clearTimeout(pressTimer);
-    }
+    let pressTimer;
+    c.ontouchstart = ()=> pressTimer = setTimeout(()=>{
+      if(confirm('Hapus order ini?')){
+        orders.splice(i,1);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        loadOrders();
+      }
+    },600);
+    c.ontouchend = ()=> clearTimeout(pressTimer);
 
     grid.appendChild(c);
   });
 }
 
 imageInput.onchange = e => {
-  if(!isAdmin) return;
   const file = e.target.files[0];
   if(!file) return;
   const reader = new FileReader();
