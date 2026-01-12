@@ -1,247 +1,273 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Waiting List Order</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waiting List Order</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-<style>
-*{
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
-}
+  <style>
+    * { box-sizing: border-box; }
 
-body{
-  margin:0;
-  padding:16px;
-  background:
-    linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25)),
-    url('https://i.pinimg.com/1200x/8e/d4/93/8ed493038bc8c1f7dec3bf3577dc0f08.jpg')
-    center/cover no-repeat fixed;
-}
+    :root {
+      --bg-image: url('https://i.pinimg.com/1200x/8e/d4/93/8ed493038bc8c1f7dec3bf3577dc0f08.jpg');
+    }
 
-.container{
-  max-width:480px;
-  margin:auto;
-  background:rgba(255,255,255,.9);
-  padding:16px;
-  border-radius:22px;
-}
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), var(--bg-image) center / cover no-repeat fixed;
+      margin: 0;
+      padding: 16px;
+    }
 
-.top-bar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:16px;
-}
+    .container {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(10px);
+      border-radius: 22px;
+      padding: 16px;
+      max-width: 480px;
+      margin: auto;
+      animation: fadeIn 0.4s ease;
+    }
 
-.add-btn{
-  padding:8px 14px;
-  border:none;
-  border-radius:20px;
-  background:#000;
-  color:#fff;
-  font-size:13px;
-}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-  gap:12px;
-}
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
 
-.card{
-  background:#fff;
-  padding:12px;
-  border-radius:16px;
-  cursor:pointer;
-  box-shadow:0 4px 10px rgba(0,0,0,.1);
-}
+    h1 { font-size: 20px; margin: 0; font-weight: 600; }
 
-.nama{
-  font-weight:600;
-  font-size:14px;
-}
+    .add-btn {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      background: #000;
+      color: #fff;
+      font-size: 13px;
+    }
 
-.modal{
-  position:fixed;
-  inset:0;
-  display:none;
-  background:rgba(0,0,0,.45);
-  align-items:center;
-  justify-content:center;
-  z-index:50;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
+    }
 
-.modal-box{
-  background:#fff;
-  padding:18px;
-  border-radius:18px;
-  width:100%;
-  max-width:360px;
-}
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      position: relative;
+      cursor: pointer;
+    }
 
-input,textarea{
-  width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  font-size:13px;
-}
+    .card .nama {
+      font-weight: 600;
+      font-size: 14px;
+    }
 
-textarea{
-  height:160px;
-  resize:none;
-}
+    .card .timer {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #ff6fae;
+    }
 
-.save-btn{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:20px;
-  background:#000;
-  color:#fff;
-}
+    /* modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
 
-img{
-  width:100%;
-  border-radius:12px;
-  margin-top:8px;
-  display:none;
-}
-</style>
+    .modal-box {
+      background: #fff;
+      width: 100%;
+      max-width: 360px;
+      padding: 20px;
+      border-radius: 22px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    textarea { height: 180px; resize: none; }
+
+    .save-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      background: #000;
+      color: #fff;
+      font-size: 13px;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
   <div class="top-bar">
-    <h3>Waiting List</h3>
+    <h1>Waiting List</h1>
     <button class="add-btn" onclick="openAdd()">+ Tambah</button>
   </div>
+
   <div class="grid" id="orderGrid"></div>
 </div>
 
+<!-- ADD ORDER -->
 <div class="modal" id="addModal">
   <div class="modal-box">
-    <h4>Tambah Customer</h4>
-    <input id="inputNama" placeholder="Nama customer">
-    <button class="save-btn" onclick="addOrder()">Lanjut</button>
+    <h2>Tambah Customer</h2>
+    <input id="inputNama" placeholder="Nama customer" />
+    <button class="save-btn" onclick="addOrder()">Lanjut Isi Notes</button>
   </div>
 </div>
 
+<!-- NOTES -->
 <div class="modal" id="notesModal">
   <div class="modal-box">
-    <h4>Form Order</h4>
+    <h2>Form Order / Notes</h2>
 
-    <input type="date" id="deadlineInput">
+    <input type="date" id="deadlineInput" />
 
-    <textarea id="notesText" placeholder="Isi form order di sini..."></textarea>
+    <textarea id="notesText" placeholder="Tulis form order di sini..."></textarea>
 
-    <input type="file" id="imageInput" accept="image/*">
-    <img id="previewImg">
+    <input type="file" id="imageInput" accept="image/*" />
+    <img id="previewImg" style="width:100%;margin-top:10px;border-radius:12px;display:none" />
 
     <button class="save-btn" onclick="saveNotes()">Simpan</button>
   </div>
 </div>
 
 <script>
-const grid=document.getElementById('orderGrid');
-const addModal=document.getElementById('addModal');
-const notesModal=document.getElementById('notesModal');
-const inputNama=document.getElementById('inputNama');
-const notesText=document.getElementById('notesText');
-const deadlineInput=document.getElementById('deadlineInput');
-const imageInput=document.getElementById('imageInput');
-const previewImg=document.getElementById('previewImg');
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.getElementById('orderGrid');
+  const addModal = document.getElementById('addModal');
+  const notesModal = document.getElementById('notesModal');
 
-let currentIndex=null;
+  const inputNama = document.getElementById('inputNama');
+  const notesText = document.getElementById('notesText');
+  const deadlineInput = document.getElementById('deadlineInput');
+  const imageInput = document.getElementById('imageInput');
+  const previewImg = document.getElementById('previewImg');
 
-function openAdd(){
-  addModal.style.display='flex';
-}
+  let currentIndex = null;
 
-function addOrder(){
-  if(!inputNama.value)return alert('Isi nama');
-  const orders=JSON.parse(localStorage.getItem('orders'))||[];
-  orders.push({nama:inputNama.value,notes:'',deadline:'',image:''});
-  localStorage.setItem('orders',JSON.stringify(orders));
-  inputNama.value='';
-  addModal.style.display='none';
-  loadOrders();
-}
-
-function openNotes(i){
-  currentIndex=i;
-  const orders=JSON.parse(localStorage.getItem('orders'));
-  notesText.value=orders[i].notes||'';
-  deadlineInput.value=orders[i].deadline||'';
-  if(orders[i].image){
-    previewImg.src=orders[i].image;
-    previewImg.style.display='block';
-  }else{
-    previewImg.style.display='none';
+  window.openAdd = function () {
+    addModal.style.display = 'flex';
   }
-  notesModal.style.display='flex';
-}
 
-function saveNotes(){
-  const orders=JSON.parse(localStorage.getItem('orders'));
-  orders[currentIndex].notes=notesText.value;
-  orders[currentIndex].deadline=deadlineInput.value;
-  orders[currentIndex].image=previewImg.src||'';
-  localStorage.setItem('orders',JSON.stringify(orders));
-  notesModal.style.display='none';
-  loadOrders();
-}
+  window.addOrder = function () {
+    const nama = inputNama.value.trim();
+    if (!nama) return alert('Nama dulu ya');
 
-function loadOrders(){
-  const orders=JSON.parse(localStorage.getItem('orders'))||[];
-  grid.innerHTML='';
-  orders.forEach((o,i)=>{
-    const c=document.createElement('div');
-    c.className='card';
-    c.innerHTML=`<div class="nama">${o.nama}</div>`;
-    c.onclick=()=>openNotes(i);
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push({ nama, notes: '', deadline: '', image: '' });
+    localStorage.setItem('orders', JSON.stringify(orders));
 
-    c.oncontextmenu=e=>{
-      e.preventDefault();
-      if(confirm('Hapus order ini?')){
-        orders.splice(i,1);
-        localStorage.setItem('orders',JSON.stringify(orders));
-        loadOrders();
-      }
+    inputNama.value = '';
+    addModal.style.display = 'none';
+    loadOrders();
+  }
+
+  function openNotes(index) {
+    currentIndex = index;
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+    notesText.value = orders[index].notes || '';
+    deadlineInput.value = orders[index].deadline || '';
+
+    if (orders[index].image) {
+      previewImg.src = orders[index].image;
+      previewImg.style.display = 'block';
+    } else {
+      previewImg.style.display = 'none';
+    }
+
+    notesModal.style.display = 'flex';
+  }
+
+  window.saveNotes = function () {
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    if (currentIndex === null) return;
+
+    orders[currentIndex].notes = notesText.value;
+    orders[currentIndex].deadline = deadlineInput.value;
+    orders[currentIndex].image = previewImg.src || '';
+
+    localStorage.setItem('orders', JSON.stringify(orders));
+    notesModal.style.display = 'none';
+    loadOrders();
+  }
+
+  function deleteOrder(index) {
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.splice(index, 1);
+    localStorage.setItem('orders', JSON.stringify(orders));
+    loadOrders();
+  }
+
+  function loadOrders() {
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    grid.innerHTML = '';
+
+    orders.forEach((o, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<div class="nama">${o.nama}</div>`;
+
+      card.onclick = () => openNotes(i);
+
+      card.oncontextmenu = e => {
+        e.preventDefault();
+        if (confirm('Hapus order ini?')) deleteOrder(i);
+      };
+
+      let pressTimer;
+      card.ontouchstart = () => {
+        pressTimer = setTimeout(() => {
+          if (confirm('Hapus order ini?')) deleteOrder(i);
+        }, 600);
+      };
+      card.ontouchend = () => clearTimeout(pressTimer);
+
+      grid.appendChild(card);
+    });
+  }
+
+  imageInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      previewImg.src = reader.result;
+      previewImg.style.display = 'block';
     };
-
-    let pressTimer;
-    c.ontouchstart=()=>pressTimer=setTimeout(()=>{
-      if(confirm('Hapus order ini?')){
-        orders.splice(i,1);
-        localStorage.setItem('orders',JSON.stringify(orders));
-        loadOrders();
-      }
-    },600);
-    c.ontouchend=()=>clearTimeout(pressTimer);
-
-    grid.appendChild(c);
+    reader.readAsDataURL(file);
   });
-}
 
-imageInput.onchange=e=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=()=>{
-    previewImg.src=reader.result;
-    previewImg.style.display='block';
-  };
-  reader.readAsDataURL(file);
-};
-
-loadOrders();
+  loadOrders();
+});
 </script>
-
 </body>
 </html>
