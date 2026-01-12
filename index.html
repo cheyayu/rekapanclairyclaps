@@ -128,7 +128,10 @@
 <div class="container">
   <div class="top-bar">
     <h1>Waiting List</h1>
-    <button class="add-btn" onclick="openAdd()">+ Tambah</button>
+    <div>
+      <button class="add-btn" id="loginBtn">Login</button>
+      <button class="add-btn" id="addBtn" style="display:none">+ Tambah</button>
+    </div>
   </div>
 
   <div class="grid" id="orderGrid"></div>
@@ -161,9 +164,13 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const ADMIN_CODE = 'minjeonglah'; // GANTI KODE DI SINI
+
   const grid = document.getElementById('orderGrid');
   const addModal = document.getElementById('addModal');
   const notesModal = document.getElementById('notesModal');
+  const loginBtn = document.getElementById('loginBtn');
+  const addBtn = document.getElementById('addBtn');
 
   const inputNama = document.getElementById('inputNama');
   const notesText = document.getElementById('notesText');
@@ -172,12 +179,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewImg = document.getElementById('previewImg');
 
   let currentIndex = null;
+  let isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+  function updateAdminUI() {
+    if (isAdmin) {
+      addBtn.style.display = 'inline-block';
+      loginBtn.style.display = 'none';
+    }
+  }
+
+  loginBtn.onclick = () => {
+    const code = prompt('Masukkan kode admin');
+    if (code === ADMIN_CODE) {
+      isAdmin = true;
+      localStorage.setItem('isAdmin', 'true');
+      updateAdminUI();
+      alert('Login berhasil');
+    } else {
+      alert('Kode salah');
+    }
+  };
 
   window.openAdd = function () {
+    if (!isAdmin) return;
     addModal.style.display = 'flex';
   }
 
   window.addOrder = function () {
+    if (!isAdmin) return;
     const nama = inputNama.value.trim();
     if (!nama) return alert('Nama dulu ya');
 
@@ -191,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openNotes(index) {
+    if (!isAdmin) return;
     currentIndex = index;
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
 
@@ -208,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.saveNotes = function () {
+    if (!isAdmin) return;
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
     if (currentIndex === null) return;
 
@@ -221,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function deleteOrder(index) {
+    if (!isAdmin) return;
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
     orders.splice(index, 1);
     localStorage.setItem('orders', JSON.stringify(orders));
@@ -236,20 +268,21 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'card';
       card.innerHTML = `<div class="nama">${o.nama}</div>`;
 
-      card.onclick = () => openNotes(i);
-
-      card.oncontextmenu = e => {
-        e.preventDefault();
-        if (confirm('Hapus order ini?')) deleteOrder(i);
-      };
-
-      let pressTimer;
-      card.ontouchstart = () => {
-        pressTimer = setTimeout(() => {
+      if (isAdmin) {
+        card.onclick = () => openNotes(i);
+        card.oncontextmenu = e => {
+          e.preventDefault();
           if (confirm('Hapus order ini?')) deleteOrder(i);
-        }, 600);
-      };
-      card.ontouchend = () => clearTimeout(pressTimer);
+        };
+
+        let pressTimer;
+        card.ontouchstart = () => {
+          pressTimer = setTimeout(() => {
+            if (confirm('Hapus order ini?')) deleteOrder(i);
+          }, 600);
+        };
+        card.ontouchend = () => clearTimeout(pressTimer);
+      }
 
       grid.appendChild(card);
     });
@@ -266,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsDataURL(file);
   });
 
+  updateAdminUI();
   loadOrders();
 });
 </script>
